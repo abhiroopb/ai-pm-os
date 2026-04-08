@@ -14,7 +14,8 @@ PM_OS_DIR="$(dirname "$DAEMON_DIR")"
 STATE_DIR="$PM_OS_DIR/.state"
 LOG_FILE="$STATE_DIR/daemon.log"
 AMP="$HOME/bin/amp"
-SLACK_CMD="sq agent-tools slack"
+# Configure your Slack CLI tool here (e.g., slack-cli, slackcat, or a custom wrapper)
+SLACK_CMD="${SLACK_CMD:-slack-cli}"
 SLACK_CHANNEL="my-bot-channel"
 SLACK_CHANNEL_ID="C0XXXXXXXXX"
 
@@ -95,7 +96,7 @@ $thread_context")
 INSTRUCTIONS:
 1. Understand what the user is asking for based on the reply and thread context
 2. Take the action (update people profiles, add to-do items, update project files, send follow-up messages, etc.)
-3. Post a confirmation reply in the same thread: sq agent-tools slack post-message --channel-id $SLACK_CHANNEL_ID --thread-ts '${thread_ts:-$reply_ts}' --text '<confirmation>'
+3. Post a confirmation reply in the same thread: $SLACK_CMD post-message --channel-id $SLACK_CHANNEL_ID --thread-ts '${thread_ts:-$reply_ts}' --text '<confirmation>'
 4. Keep responses concise."
 
     $AMP -x "$action_prompt" >> "$LOG_FILE" 2>&1 || {

@@ -21,7 +21,8 @@ DAILY_DIR="$PM_OS_DIR/notes/daily"
 PEOPLE_DIR="$PM_OS_DIR/people"
 WORKSTREAMS_DIR="$PM_OS_DIR/workstreams"
 AMP="$HOME/bin/amp"
-SLACK_CMD="sq agent-tools slack"
+# Configure your Slack CLI tool here
+SLACK_CMD="${SLACK_CMD:-slack-cli}"
 LOCK_FILE="$STATE_DIR/journal-sync.lock"
 
 mkdir -p "$STATE_DIR" "$DAILY_DIR"

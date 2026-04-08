@@ -18,7 +18,8 @@ GCAL_CLI="$GCAL_DIR/gcal-cli.py"
 GDRIVE_DIR="$HOME/.agents/skills/gdrive"
 GDRIVE_CLI="$GDRIVE_DIR/gdrive-cli.py"
 AMP="$HOME/bin/amp"
-SLACK_CMD="sq agent-tools slack"
+# Configure your Slack CLI tool here
+SLACK_CMD="${SLACK_CMD:-slack-cli}"
 SLACK_CHANNEL="my-bot-channel"
 
 EVENT_ID="${1:-}"
