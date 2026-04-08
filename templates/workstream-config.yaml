@@ -1,0 +1,18 @@
+# Workstream configuration
+#
+# Fields:
+#   name              — Human-readable project name
+#   auto_open         — Whether to open this pane automatically on start-day (true/false)
+#   priority          — P1 (critical), P2 (important), P3 (normal), P4 (low)
+#   stale_after_days  — Alert if CONTEXT.md hasn't been updated in this many days
+#   description       — One-liner for dashboards and summaries
+#   startup_instruction — What the agent should do when this pane opens
+
+name: ""
+auto_open: false
+priority: P3
+stale_after_days: 7
+description: ""
+startup_instruction: >
+  Review CONTEXT.md for current state. Summarize what changed
+  since the last session and ask what to focus on.

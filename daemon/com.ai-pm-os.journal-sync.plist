@@ -1,0 +1,46 @@
+<!-- Replace /Users/YOURUSER with your actual home directory -->
+<!-- Note: launchd requires absolute paths — $HOME and ~ are NOT expanded -->
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>com.ai-pm-os.journal-sync</string>
+
+	<key>Program</key>
+	<string>/bin/bash</string>
+
+	<key>ProgramArguments</key>
+	<array>
+		<string>/bin/bash</string>
+		<string>/Users/YOURUSER/Development/ai-pm-os/daemon/journal-sync.sh</string>
+	</array>
+
+	<key>WorkingDirectory</key>
+	<string>/Users/YOURUSER/Development/ai-pm-os</string>
+
+	<key>StartInterval</key>
+	<integer>900</integer>
+
+	<key>RunAtLoad</key>
+	<false/>
+
+	<key>StandardOutPath</key>
+	<string>/Users/YOURUSER/Development/ai-pm-os/.state/journal-sync.out.log</string>
+
+	<key>StandardErrorPath</key>
+	<string>/Users/YOURUSER/Development/ai-pm-os/.state/journal-sync.err.log</string>
+
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>PATH</key>
+		<string>/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/YOURUSER/.local/bin</string>
+		<key>HOME</key>
+		<string>/Users/YOURUSER</string>
+		<key>LANG</key>
+		<string>en_US.UTF-8</string>
+		<key>LC_ALL</key>
+		<string>en_US.UTF-8</string>
+	</dict>
+</dict>
+</plist>

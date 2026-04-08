@@ -1,0 +1,15 @@
+# Workstream configuration for the AI agent
+# See templates/workstream-config.yaml for field reference
+
+name: User Onboarding Redesign
+auto_open: true
+priority: P1
+stale_after_days: 3
+description: >
+  Redesign of the new user onboarding flow to reduce
+  time-to-first-value and improve activation rates.
+
+startup_instruction: >
+  Review CONTEXT.md for current state. Check the project tracker
+  for any updates since the last session. Summarize what changed
+  and what's next before asking for direction.

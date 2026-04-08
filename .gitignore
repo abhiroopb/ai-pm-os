@@ -1,0 +1,19 @@
+# Runtime state (regenerated each session)
+.state/
+
+# Logs
+*.log
+
+# Sensitive content (keep private)
+notes/sensitive/
+
+# People profiles (may contain private notes — keep in a separate private repo)
+people/
+
+# OS artifacts
+.DS_Store
+
+# Dependencies
+node_modules/
+node_modules/
+dist/
