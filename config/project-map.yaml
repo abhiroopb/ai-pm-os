@@ -1,0 +1,18 @@
+# Project keyword → folder mapping for auto-routing meeting notes
+projects:
+  onboarding-redesign:
+    folder: onboarding-redesign
+    keywords: [onboarding, signup, sign up, registration, first-run, welcome flow]
+    slack_channel: "#onboarding-redesign"
+  search-improvements:
+    folder: search-improvements
+    keywords: [search, relevance, ranking, autocomplete, filters, search results]
+    slack_channel: "#search-improvements"
+  mobile-payments:
+    folder: mobile-payments
+    keywords: [mobile payments, contactless, tap to pay, NFC, wallet, apple pay]
+    slack_channel: "#mobile-payments"
+  dashboard-v2:
+    folder: dashboard-v2
+    keywords: [dashboard, analytics, reporting, metrics, charts, insights]
+    slack_channel: "#dashboard-v2"

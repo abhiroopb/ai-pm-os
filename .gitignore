@@ -7,8 +7,8 @@
 # Sensitive content (keep private)
 notes/sensitive/
 
-# People profiles (may contain private notes — keep in a separate private repo)
-people/
+# Uncomment the next line to keep people profiles private (untracked):
+# people/
 
 # OS artifacts
 .DS_Store

@@ -1,0 +1,7 @@
+# Map alternative names/handles to canonical people/ slugs
+# Used by agents to resolve mentions to the right profile
+aliases:
+  # "jsmith" → people/jane-smith.md
+  jsmith: jane-smith
+  "Jane S": jane-smith
+  # Add your team's aliases here
