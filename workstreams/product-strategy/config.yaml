@@ -1,0 +1,22 @@
+name: product-strategy
+priority: medium
+status: active
+owner: you
+created: 2026-03-10
+
+startup_instruction: |
+  Check if leadership review date (April 18) is approaching.
+  Surface any unresolved debates on resource allocation.
+  Review cross-workstream dependencies.
+
+tags:
+  - strategy
+  - roadmap
+  - planning
+  - q3
+
+sources:
+  - type: docs
+    folder: Product Strategy Q3
+  - type: tracker
+    project: q3-planning

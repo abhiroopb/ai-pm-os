@@ -1,107 +1,97 @@
-# AI PM OS — An AI-Powered Operating System for Product Managers
+# AI PM OS
 
-> A file-based convention for managing parallel AI agent workstreams via [cmux](https://cmux.dev)
+An AI-powered operating system for product managers who want durable context, parallel workstreams, and a repeatable start-of-day flow.
 
-One command boots your entire daily operating environment with AI agents that maintain context across sessions. Each workstream gets its own terminal pane with persistent context, and a Chief of Staff agent orchestrates your morning triage, comms processing, and daily planning.
+This repo uses a simple idea: every meaningful thread of work gets its own folder with a living `CONTEXT.md`, and your `start-day` script uses that context to decide what to open in `cmux`. The result is a workspace that survives crashes, context resets, and interrupted weeks better than chat history alone.
 
-## Key Features
+## What You Get
 
-- **Chief of Staff agent** — Automated morning workflow: calendar review, comms triage, daily note generation, and priority surfacing
-- **Workstream management** — Parallel AI agents, each with persistent context files that survive across sessions
-- **Journal sync daemon** — Background process that keeps daily notes, workstream state, and cross-references in sync
-- **Meeting pre-briefs & post-ingestion** — Auto-generated context before meetings, structured capture afterward
-- **Cross-linked daily notes** — Every decision, update, and action item is timestamped and linked back to its workstream
+- A `Chief of Staff` startup flow that reviews your notes, open workstreams, and routines before opening focused sessions.
+- A file-based workstream model where `CONTEXT.md` is the source of continuity.
+- Reusable routines for comms, meetings, and recurring operational work.
+- Optional background scripts for daily notes, meeting briefs, and post-meeting filing.
+- Repo-local agent skills you can customize instead of rebuilding the workflow from scratch.
 
-## Architecture
+## How The Day Starts
 
+```text
+bash system/start-day.sh
+  -> validates prerequisites
+  -> boots or reuses cmux
+  -> opens the Chief of Staff workspace
+  -> Chief of Staff reads notes + workstreams + routines
+  -> writes system/today-plan.json
+  -> launch script opens the recommended workstreams
+  -> each workstream resumes from its own CONTEXT.md
 ```
-start-day.sh
-│
-├─► Chief of Staff (cmux pane 0)
-│   ├── Calendar review
-│   ├── Comms triage (email, Slack, notifications)
-│   ├── Daily note generation
-│   └── Priority surfacing
-│
-├─► Workstream: feature-alpha (cmux pane 1)
-│   ├── CONTEXT.md  ← persistent state
-│   └── config.yaml ← behavior settings
-│
-├─► Workstream: launch-beta (cmux pane 2)
-│   ├── CONTEXT.md
-│   └── config.yaml
-│
-├─► Routine: comms-triage (cmux pane 3)
-│   └── CONTEXT.md  ← triage rules & patterns
-│
-└─► Daemon: journal-sync (background)
-    └── Watches workstreams → updates daily notes
-```
+
+`CONTEXT.md` is the key design choice. If the terminal dies, the workstream does not.
 
 ## Quick Start
 
 ```bash
 # 1. Clone the repo
-git clone https://github.com/anthropics/ai-pm-os.git
+git clone https://github.com/abhiroopb/ai-pm-os.git
 cd ai-pm-os
 
-# 2. Review the directory structure
-ls workstreams/ routines/ templates/
+# 2. Install prerequisites
+brew install jq
+python3 -m pip install pyyaml
 
-# 3. Create your first workstream
-cp templates/workstream-config.yaml workstreams/my-project/config.yaml
-cp templates/workstream-context.md workstreams/my-project/CONTEXT.md
+# 3. Create a workstream from the templates
+mkdir -p workstreams/my-first-workstream
+cp templates/workstream-config.yaml workstreams/my-first-workstream/config.yaml
+cp templates/workstream-context.md workstreams/my-first-workstream/CONTEXT.md
 
-# 4. Edit the context and config for your project
-$EDITOR workstreams/my-project/CONTEXT.md
+# 4. Personalize the prompt and your first workstream
+$EDITOR system/chief-of-staff-prompt.md
+$EDITOR workstreams/my-first-workstream/CONTEXT.md
 
-# 5. Boot your operating environment
-./start-day.sh
+# 5. Dry run first, then launch for real
+bash system/start-day.sh --dry-run
+bash system/start-day.sh
 ```
 
-See [docs/chief-of-staff-setup.md](docs/chief-of-staff-setup.md) for detailed setup and configuration.
+## Installation Notes
 
-## Prerequisites
+This repo currently assumes:
 
-| Tool | Purpose |
-|------|---------|
-| [cmux](https://cmux.dev) | Terminal multiplexer for parallel agent panes |
-| [Amp CLI](https://ampcode.com) | AI agent runtime |
-| `jq` | JSON processing for config files |
-| `python3` + `PyYAML` | Config parsing and daemon scripts |
+- macOS
+- [cmux](https://cmux.dev) with Automation access enabled
+- [Amp CLI](https://ampcode.com) in your `PATH`
+- `jq`
+- `python3` with `PyYAML`
 
-## Directory Structure
+Optional integrations such as calendar lookups, email triage, chat triage, and issue-tracker checks are intentionally left customizable. Start with the local file workflow, then wire in your own tools.
 
-```
+## Documentation Map
+
+- [Installation guide](docs/installation.md): prerequisites, first-run setup, and optional launchd wiring.
+- [Chief of Staff setup](docs/chief-of-staff-setup.md): the operating model and key files.
+- [Session lifecycle](docs/session-lifecycle.md): how `cmux` sessions spin up and resume.
+- [Skills](docs/skills.md): included repo-local skills and how to use them.
+- [Workstreams](workstreams/README.md): example workstreams and how to shape your own.
+
+## Repository Layout
+
+```text
 ai-pm-os/
-├── workstreams/          # Active projects and features
-│   ├── example-project/
-│   │   ├── CONTEXT.md    # Persistent workstream state
-│   │   └── config.yaml   # Behavior and priority settings
-│   └── _archive/         # Completed or paused workstreams
-├── routines/             # Recurring processes (comms, meetings, etc.)
-│   ├── comms-triage/
-│   ├── meetings/
-│   └── scheduled-jobs/
-├── templates/            # Blank templates for new workstreams
-├── notes/                # Daily notes and journals
-├── docs/                 # Setup guides and documentation
-├── daemon/               # Background sync processes
-└── system/               # Core system configuration
+├── .agents/skills/      # Repo-local skills for Amp
+├── workstreams/         # Finite projects with durable context
+├── routines/            # Recurring operating loops
+├── templates/           # Starter files for new work
+├── notes/               # Daily notes and private working memory
+├── docs/                # Setup and workflow documentation
+├── daemon/              # Optional background automation
+└── system/              # Start-of-day scripts and prompts
 ```
 
-## How It Works
+## Runtime Hygiene
 
-**Workstreams** are the core unit. Each is a folder with a `CONTEXT.md` file that the AI agent reads at session start to pick up where it left off. The `config.yaml` controls priority, auto-open behavior, and startup instructions.
+Live plan files, daily notes, logs, and other generated runtime state are ignored by default. That includes the lightweight derived state under `system/state/`, which mirrors the current `queue` and `now` view from the launch plan.
 
-**Routines** are recurring processes (like comms triage or meeting prep) that run on a schedule or are triggered by the Chief of Staff.
-
-**The Chief of Staff** is a meta-agent that runs first each morning. It reviews your calendar, triages communications, generates a daily note, and opens the right workstream panes based on priority and staleness.
+Tracked examples live under [`docs/examples/`](docs/examples/).
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
-
----
-
-Built for use with [Amp](https://ampcode.com) and [cmux](https://cmux.dev).
+MIT. See [LICENSE](LICENSE).

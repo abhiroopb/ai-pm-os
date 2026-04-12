@@ -10,7 +10,7 @@ Redesign the new user onboarding flow to reduce time-to-first-value from 12 minu
 
 ## What's Done
 
-- [x] User research: interviewed 15 churned users and 10 power users (notes in Google Drive)
+- [x] User research: interviewed 15 churned users and 10 power users (notes in the shared docs folder)
 - [x] Competitive analysis: reviewed onboarding flows of 6 competitors
 - [x] New flow design: 3-step progressive onboarding with inline tutorials
 - [x] Design review approved by product and design leads

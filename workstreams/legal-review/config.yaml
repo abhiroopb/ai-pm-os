@@ -1,0 +1,19 @@
+name: legal-review
+priority: low
+status: reference
+owner: you
+created: 2026-03-20
+
+startup_instruction: |
+  Check for any updates on pending legal reviews.
+  Surface the GDPR legitimate interest question if still unresolved.
+
+tags:
+  - legal
+  - compliance
+  - gdpr
+  - terms-of-service
+
+sources:
+  - type: docs
+    folder: Legal Reviews

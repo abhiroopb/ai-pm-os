@@ -1,6 +1,6 @@
 # Routines
 
-Routines are recurring processes that run on a schedule or are triggered by another agent (usually the Chief of Staff). Unlike workstreams, routines don't track project progress — they perform a repeatable task and produce output.
+Routines are recurring processes that run on a schedule or are triggered by another agent, usually the Chief of Staff. Unlike workstreams, routines do not track a single project's evolving state. They perform a repeatable process and produce a reusable output.
 
 ## Routines vs. Workstreams
 
@@ -16,14 +16,14 @@ Routines are recurring processes that run on a schedule or are triggered by anot
 
 | Folder | Description | Trigger |
 |--------|-------------|---------|
-| `comms-triage/` | Process email and messages, draft responses, surface urgent items | Daily (morning) |
+| `comms-triage/` | Process inbox and chat, draft responses, surface urgent items | Daily (morning) |
 | `meetings/` | Generate pre-briefs before meetings, ingest notes afterward | Calendar-driven |
 | `scheduled-jobs/` | Cron-style tasks: stale workstream alerts, weekly summaries | Timer-based |
 | `todo/` | Reconcile to-do list against completed work, surface overdue items | Daily (morning) |
 
 ## Structure
 
-Each routine folder contains a `CONTEXT.md` that defines the routine's rules, patterns, and behavior. The agent reads this file to understand how to execute the routine.
+Each routine folder contains a `CONTEXT.md` that defines the routine's rules, patterns, connectors, and output shape. The examples in this repo stay tool-agnostic on purpose. Swap in your own calendar, inbox, chat, tracker, and docs stack where needed.
 
 ```
 routines/

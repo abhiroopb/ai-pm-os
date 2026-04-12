@@ -1,0 +1,31 @@
+{
+  "date": "2026-04-08",
+  "today_note": "notes/daily/2026-04-08.md",
+  "note_created": false,
+  "git_activity_summary": "Recent activity touched the checkout, onboarding, and API integration workstreams. The repo also picked up documentation and template cleanup, so the Chief of Staff should favor current delivery work over broad repo maintenance.",
+  "todo_summary": "1. Review checkout experiment results. 2. Follow up on the partner API timeline. 3. Prep Q3 roadmap talking points. 4. Schedule the legal review sync. 5. Close the sprint retro follow-ups.",
+  "calendar_summary": "10:00 AM checkout standup, 11:00 AM planning prep, 2:00 PM API partner sync, 4:00 PM growth strategy review.",
+  "workstreams_to_open": [
+    {
+      "name": "checkout-ux",
+      "display_name": "Checkout UX",
+      "priority": "high",
+      "prompt": "Read CONTEXT.md. Review the latest experiment numbers, check accessibility follow-ups, and draft a short status update with the next ship decision.",
+      "reason": "Experiment results are close to a decision threshold and need attention today."
+    },
+    {
+      "name": "api-integration",
+      "display_name": "API Integration",
+      "priority": "medium",
+      "prompt": "Read CONTEXT.md. Prep for the partner sync, check the latest engineering status, and capture any blockers that need escalation.",
+      "reason": "There is a partner touchpoint today and the workstream has active dependencies."
+    }
+  ],
+  "workstreams_skipped": [
+    {
+      "name": "sdk-updates",
+      "display_name": "SDK Updates",
+      "reason": "No release pressure today and no current blocker surfaced in the recent context."
+    }
+  ]
+}

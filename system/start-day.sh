@@ -28,6 +28,10 @@ NOTES_DIR="$REPO_ROOT/notes"
 DAILY_DIR="$NOTES_DIR/daily"
 WORKSTREAMS_DIR="$REPO_ROOT/workstreams"
 PLAN_FILE="$SYSTEM_DIR/today-plan.json"
+STATE_DIR="$SYSTEM_DIR/state"
+STATE_SOURCES_DIR="$STATE_DIR/sources"
+STATE_QUEUE_FILE="$STATE_DIR/queue.json"
+STATE_NOW_FILE="$STATE_DIR/now.json"
 PLANS_ARCHIVE="$SYSTEM_DIR/plans"
 LOGS_DIR="$SYSTEM_DIR/logs"
 COS_PROMPT="$SYSTEM_DIR/chief-of-staff-prompt.md"
@@ -191,7 +195,7 @@ phase_1_discover() {
     log_info "Found ${#WORKSTREAMS_FOUND[@]} workstreams: ${WORKSTREAMS_FOUND[*]+"${WORKSTREAMS_FOUND[*]}"}"
 
     # Ensure directories exist
-    mkdir -p "$DAILY_DIR" "$PLANS_ARCHIVE" "$LOGS_DIR" "$NOTES_DIR/sensitive"
+    mkdir -p "$DAILY_DIR" "$PLANS_ARCHIVE" "$LOGS_DIR" "$NOTES_DIR/sensitive" "$STATE_DIR" "$STATE_SOURCES_DIR"
 
     NOTE_PATH="$DAILY_DIR/$TODAY.md"
 
@@ -426,6 +430,7 @@ phase_4_wait_for_plan() {
            jq -e '.workstreams_to_open' "$PLAN_FILE" >/dev/null 2>&1; then
             log_ok "Valid plan received (${elapsed}s)"
             set_workspace_status "$COS_REF" "status" "plan ready" "" "#00CC00"
+            refresh_state_from_plan
             return 0
         fi
 
@@ -463,6 +468,20 @@ phase_4_wait_for_plan() {
     phase_5_fallback_launch
     phase_6_report
     exit 1
+}
+
+refresh_state_from_plan() {
+    if [[ ! -f "$PLAN_FILE" ]]; then
+        return 0
+    fi
+
+    python3 "$SYSTEM_DIR/scripts/build-state-from-plan.py" \
+        --plan "$PLAN_FILE" \
+        --queue "$STATE_QUEUE_FILE" \
+        --now "$STATE_NOW_FILE" \
+        --source-plan "$STATE_SOURCES_DIR/plan.json" >/dev/null 2>&1 || {
+        log_warn "Failed to refresh derived state from plan"
+    }
 }
 
 # Fallback when plan file is missing: launch workstreams with priority=high in config.yaml
@@ -659,6 +678,20 @@ phase_6_report() {
         echo "|  Daily note:      $NOTE_PATH (exists)"
     else
         echo "|  Daily note:      $NOTE_PATH (pending CoS creation)"
+    fi
+
+    if [[ -f "$STATE_NOW_FILE" ]]; then
+        local now_summary
+        now_summary=$(python3 - "$STATE_NOW_FILE" <<'PY'
+import json, sys
+payload = json.load(open(sys.argv[1]))
+current = payload.get("now") or {}
+workspace = current.get("workspace", "idle")
+title = current.get("title", "No recommended action")
+print(f"{workspace}: {title}")
+PY
+)
+        echo "|  Now:             $now_summary"
     fi
 
     echo "|"

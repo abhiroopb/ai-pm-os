@@ -1,54 +1,46 @@
 # Workstreams
 
-Each workstream is a folder representing an active project, feature, or initiative. The AI agent reads the workstream's context at session start to resume work with full continuity.
+Example product-management workstreams for this repo. Treat them as patterns you can rename, replace, or delete once you start using the system with your own projects.
 
-## Convention
+Each folder contains a `CONTEXT.md` living context doc and a `config.yaml` workstream configuration file.
 
-Every workstream folder contains two files:
+## Active Workstreams
 
-| File | Purpose |
-|------|---------|
-| `CONTEXT.md` | Persistent state: objective, current status, what's done, what's next |
-| `config.yaml` | Behavior settings: priority, auto-open rules, startup instructions |
+| Workstream | Priority | Status | Focus Area | Last Updated |
+|------------|----------|--------|------------|--------------|
+| [example-project](./example-project/) | 🔴 High | Active | Generic starter example showing what a good `CONTEXT.md` looks like. | Apr 7 |
+| [checkout-ux](./checkout-ux/) | 🔴 High | Active | Delivery workstream with an experiment in flight and rollout decisions coming soon. | Apr 7 |
+| [api-integration](./api-integration/) | 🟡 Medium | Active | Partner-platform workstream with external dependencies and staged API delivery. | Apr 4 |
+| [product-strategy](./product-strategy/) | 🟡 Medium | Active | Roadmap and portfolio-planning workstream with prioritization trade-offs. | Apr 7 |
+| [legal-review](./legal-review/) | 🟢 Low | Reference | Reference-style workstream for reviews, approvals, and compliance follow-through. | Apr 2 |
 
-The agent treats `CONTEXT.md` as its working memory for the project. Update it as things change — this is how context survives across sessions.
+## Why This Starter Set
 
-## Example Workstreams
+These five are enough to demonstrate distinct patterns without turning the public repo into a fake company snapshot:
 
-| Folder | Description | Priority | Status |
-|--------|-------------|----------|--------|
-| `user-onboarding/` | Redesign of the new user onboarding flow | P1 | 🟢 Active |
-| `api-v2-migration/` | Migrate public API from v1 to v2 | P2 | 🟢 Active |
-| `search-improvements/` | Search relevance and performance work | P3 | 🟡 Blocked |
-| `_archive/dashboard-redesign/` | Completed dashboard overhaul | — | ✅ Archived |
+- a generic starter example
+- a product-delivery workstream
+- a platform or partner workstream
+- a strategy or roadmap workstream
+- a reference or approval workstream
 
-## Workstream States
+## Routines
 
-- **🟢 Active** — Currently being worked on. Agent opens this pane automatically if `auto_open: true`.
-- **🟡 Blocked** — Waiting on an external dependency. Agent monitors but doesn't actively work. Use the "Waiting On" section in `CONTEXT.md` to track blockers.
-- **✅ Archived** — Completed or indefinitely paused. Move the folder to `_archive/`.
+| Routine | Schedule | Purpose |
+|---------|----------|---------|
+| [todo](../routines/todo/) | Daily 8:30 AM | Action item capture, reconciliation, and prioritization |
+| [meetings](../routines/meetings/) | Per-meeting | Pre-meeting briefs and post-meeting action item extraction |
+| [scheduled-jobs](../routines/scheduled-jobs/) | Various | Metrics refresh, digests, competitor monitoring, stakeholder updates |
 
-## "Waiting On" Convention
+## Structure
 
-When a workstream is blocked, add a `## Waiting On` section to `CONTEXT.md`:
-
-```markdown
-## Waiting On
-
-- [ ] Design review from @designer — shared mockups on 2026-04-01
-- [ ] API team to ship the new auth endpoint — ETA 2026-04-10
-```
-
-The Chief of Staff agent scans these during morning triage and surfaces any that are past their expected date.
-
-## Creating a New Workstream
-
-```bash
-# Copy templates
-cp templates/workstream-config.yaml workstreams/my-project/config.yaml
-cp templates/workstream-context.md workstreams/my-project/CONTEXT.md
-
-# Edit to fit your project
-$EDITOR workstreams/my-project/CONTEXT.md
-$EDITOR workstreams/my-project/config.yaml
+```text
+workstreams/
+├── README.md              ← this file
+├── <workstream>/
+│   ├── CONTEXT.md         ← living context document (objective, status, next steps)
+│   └── config.yaml        ← priority, tags, startup instructions, sources
+routines/
+├── <routine>/
+│   └── CONTEXT.md         ← routine description and configuration
 ```

@@ -1,0 +1,23 @@
+name: checkout-ux
+priority: high
+status: active
+owner: you
+created: 2026-02-10
+
+startup_instruction: |
+  Load the latest A/B test results from the experimentation dashboard.
+  Check for any new accessibility audit findings.
+  Surface blockers related to address auto-complete latency.
+  Prepare a status summary comparing current metrics to KR targets.
+
+tags:
+  - conversion
+  - checkout
+  - ux
+  - a-b-test
+
+sources:
+  - type: tracker
+    project: checkout-ux-redesign
+  - type: dashboard
+    experiment_id: CKO-2026-04

@@ -1,5 +1,15 @@
 # Runtime state (regenerated each session)
 .state/
+system/logs/
+system/plans/
+system/today-plan.json
+system/state/*.json
+system/state/*.jsonl
+system/state/sources/*.json
+notes/daily/*.md
+!notes/daily/.gitkeep
+__pycache__/
+*.pyc
 
 # Logs
 *.log

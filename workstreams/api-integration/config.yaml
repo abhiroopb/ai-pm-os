@@ -1,0 +1,22 @@
+name: api-integration
+priority: medium
+status: active
+owner: you
+created: 2026-02-20
+
+startup_instruction: |
+  Check engineering progress on write endpoints and webhook system.
+  Review any new feedback from beta partners.
+  Surface open issues tagged with api-integration in the project tracker.
+
+tags:
+  - api
+  - integrations
+  - partnerships
+  - developer-platform
+
+sources:
+  - type: tracker
+    project: partner-api
+  - type: docs
+    folder: API Integration

@@ -1,21 +1,16 @@
 jobs:
   # ── Daily ────────────────────────────────────────────────────
   #
-  # NOTE: Slack, Gmail, Todo, Linear, and GitHub triage are handled
-  # by dedicated routines (routines/slack-email, routines/todo, etc.)
-  # and are NOT listed here to avoid duplicate runs.
+  # NOTE: inbox, chat, todo, issue-tracker, and code-review triage are
+  # handled by dedicated routines and are NOT listed here to avoid duplicate runs.
   #
   # Owner: routines/scheduled-jobs/ runs these via its CONTEXT.md.
   #
-  # Skill mapping:
-  #   project-field-audit → project-tracker-status (your project tracking tool)
-  #
-
   - name: project-field-audit
     command: |
-      Load the project-tracker-status skill. Run for my owned projects.
+      Review the projects you own in your planning system.
       Cross-reference project tracker fields against issue tracker statuses,
-      recent Slack activity in project channels, and recent meetings. Flag mismatches:
+      recent communication activity, and recent meetings. Flag mismatches:
       - Tracker says "On Track" but issue tracker has blocked tickets
       - Tracker dates are in the past
       - Status hasn't been updated in 7+ days
@@ -25,48 +20,40 @@ jobs:
 
   # ── Weekly ─────────────────────────────────────────────────
   #
-  # Skill mapping:
-  #   feature-request-scan    → feature-request-scanner
-  #   project-status-update   → project-tracker-update
-  #   weekly-status-summary   → weekly-status-summary
-  #   manager-slack-summary   → manager-slack-summary
-  #   kb-distill              → kb-distill + memory
-  #
-
   - name: feature-request-scan
     command: |
-      Load the feature-request-scanner skill. Scan Slack channels for Your Team
-      feature requests. Auto-classify, score urgency, deduplicate against the
-      project tracker, write to Google Sheet, and promote P0/P1 items to the backlog.
+      Review your product feedback sources for the last week.
+      Classify incoming feature requests, score urgency, deduplicate against the
+      backlog, and draft a short summary of what needs follow-up.
     schedule: weekly-monday
     confirm: false
 
   - name: project-status-update
     command: |
-      Load the project-tracker-update skill. For each of my active projects,
-      pull from the issue tracker, Slack, and recent meetings to draft this
+      For each active project, pull from the issue tracker, recent communications,
+      and recent meetings to draft this
       week's status update. Present each draft for approval before posting.
     schedule: weekly-thursday
     confirm: false
 
   - name: weekly-status-summary
     command: |
-      Load the weekly-status-summary skill. Generate a consolidated weekly Slack summary
-      from project updates and post to the appropriate Slack channel.
+      Generate a consolidated weekly status summary from project updates.
+      Draft it for the team channel, weekly note, or whichever destination you use.
     schedule: weekly-friday
     confirm: false
 
-  - name: manager-slack-summary
+  - name: manager-summary
     command: |
-      Load the manager-slack-summary skill. Generate the weekly Slack conversation summary
-      with my manager. Update the 1:1 Google Doc with the summary.
+      Generate a weekly summary for your manager or primary stakeholder.
+      Pull recent decisions, open risks, and asks into your 1:1 notes or preferred briefing doc.
     schedule: weekly-friday
     confirm: false
 
   - name: kb-distill
     command: |
-      Load the kb-distill skill. Check memory distill-status for pending observations.
-      If >0 pending, run the full distillation: compress raw observations into structured
-      knowledge notes and propose AGENTS.md rules. Present proposed rules as approve/skip.
+      Review accumulated notes and observations.
+      Distill anything repetitive into a cleaner knowledge note or operating rule proposal.
+      Present proposed changes for approval before applying them.
     schedule: weekly-sunday
     confirm: false

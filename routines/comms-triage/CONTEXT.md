@@ -10,9 +10,9 @@ Every morning as part of the Chief of Staff workflow, or on-demand when catching
 
 Process in this order:
 
-1. **Email** — Inbox, last 24 hours (or since last triage)
-2. **Slack** — DMs first, then channels by priority tier
-3. **Notifications** — Project tracker mentions, PR reviews, doc comments
+1. **Inbox** — email or any primary inbound channel, last 24 hours (or since last triage)
+2. **Chat** — direct messages first, then channels or rooms by priority tier
+3. **Notifications** — tracker mentions, review requests, doc comments
 
 ## Triage Rules
 
@@ -46,14 +46,14 @@ Process in this order:
 
 ## Channel Priority Tiers
 
-Organize your Slack channels into tiers:
+Organize your team channels into tiers:
 
 | Tier | Description | Examples |
 |------|-------------|---------|
-| **Tier 1** | Your team + leadership | #your-team, #your-team-leads |
-| **Tier 2** | Cross-functional partners | #product, #engineering, #design |
-| **Tier 3** | Broader org | #announcements, #general |
-| **Tier 4** | Interest/social | #random, #pets, #food |
+| **Tier 1** | Your team + leadership | team room, leadership room |
+| **Tier 2** | Cross-functional partners | product, engineering, design |
+| **Tier 3** | Broader org | announcements, general |
+| **Tier 4** | Interest/social | hobby or social channels |
 
 Only triage Tier 1-2 during morning routine. Scan Tier 3 once. Skip Tier 4.
 
@@ -65,16 +65,16 @@ After triage, produce a summary:
 ## Comms Triage — YYYY-MM-DD
 
 ### 🔴 Needs Response Today
-- [Email] Subject line — from Person — brief context
-- [Slack] #channel — Person asked about X
+- [Inbox] Subject line — from Person — brief context
+- [Chat] Channel or room — Person asked about X
 
 ### 🟡 Drafted Responses (review before sending)
-- [Email] Re: Subject — drafted reply to Person
-- [Slack] DM to Person — follow-up on Y
+- [Inbox] Re: Subject — drafted reply to Person
+- [Chat] DM to Person — follow-up on Y
 
 ### 🟢 Noted (no action needed)
-- [Email] FYI: Announcement about Z
-- [Slack] #team — Decision made on W (logged to workstream)
+- [Inbox] FYI: Announcement about Z
+- [Chat] Team room — Decision made on W (logged to workstream)
 
 ### ⏭️ Skipped
 - 12 bot notifications
