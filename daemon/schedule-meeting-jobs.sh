@@ -41,7 +41,7 @@ log() {
 log "=== Scheduling meeting jobs for $TODAY ==="
 
 # Environment block for `at` jobs (they run in a minimal shell)
-# Update these paths to match your system
+# Update these connector paths to match your system
 AT_ENV="export PATH=$HOME/.local/bin:$HOME/bin:/usr/local/bin:/usr/bin:/bin:/opt/homebrew/bin
 export HOME=$HOME
 export LANG=en_US.UTF-8

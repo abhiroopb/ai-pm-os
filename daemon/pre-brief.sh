@@ -83,7 +83,7 @@ Steps:
    - Per-person context (from profiles, or 'No profile' if none)
    - Relevant open items or recent decisions
    - Any prep suggestions
-4. Post to Slack using your Slack CLI: post-message --channel-name my-bot-channel --text '<brief>'
+4. Post the brief to your configured team channel using the chat or notification tool available in this environment
    Start the message with the bot attribution prefix followed by a blank line, then the brief.
 
 Keep it short and actionable." >> "$LOG_FILE" 2>&1 || {

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# PM OS Daemon — Slack reply listener only
-# Runs every 5 minutes via launchd. Checks #my-bot-channel for new replies
+# PM OS Daemon — reply listener only
+# Runs every 5 minutes via launchd. Checks the configured chat channel for new replies
 # from the user and dispatches them via amp -x for action.
 #
 # Pre-meeting briefs and post-meeting ingestion are now handled by
@@ -14,10 +14,11 @@ PM_OS_DIR="$(dirname "$DAEMON_DIR")"
 STATE_DIR="$PM_OS_DIR/.state"
 LOG_FILE="$STATE_DIR/daemon.log"
 AMP="$HOME/bin/amp"
-# Configure your Slack CLI tool here (e.g., slack-cli, slackcat, or a custom wrapper)
-SLACK_CMD="${SLACK_CMD:-slack-cli}"
-SLACK_CHANNEL="my-bot-channel"
-SLACK_CHANNEL_ID="C0XXXXXXXXX"
+# Configure your chat CLI tool here. `CHAT_CMD`/`CHAT_CHANNEL` are preferred
+# generic names. The `SLACK_*` variables remain as backward-compatible aliases.
+CHAT_CMD="${CHAT_CMD:-${SLACK_CMD:-slack-cli}}"
+CHAT_CHANNEL="${CHAT_CHANNEL:-${SLACK_CHANNEL:-my-bot-channel}}"
+CHAT_CHANNEL_ID="${CHAT_CHANNEL_ID:-${SLACK_CHANNEL_ID:-C0XXXXXXXXX}}"
 
 mkdir -p "$STATE_DIR"
 touch "$LOG_FILE"
@@ -30,7 +31,7 @@ log "=== PM Sync daemon tick (reply listener) ==="
 
 # -----------------------------------------------------------------
 # Reply Listener
-# Check #my-bot-channel for new replies from the user and
+# Check the configured chat channel for new replies from the user and
 # dispatch them via amp -x for action
 # -----------------------------------------------------------------
 REPLY_STATE_FILE="$STATE_DIR/reply-listener-state.json"
@@ -39,14 +40,14 @@ if [ ! -f "$REPLY_STATE_FILE" ]; then
 fi
 
 process_replies() {
-  log "Checking #my-bot-channel for new replies..."
+  log "Checking configured chat channel for new replies..."
 
   local last_ts
   last_ts=$(jq -r '.last_checked_ts' "$REPLY_STATE_FILE")
 
   # Get recent messages from the channel
   local messages
-  messages=$($SLACK_CMD get-channel-messages --json "{\"channel_ids\": [\"$SLACK_CHANNEL_ID\"], \"limit\": 20}" 2>/dev/null) || {
+  messages=$($CHAT_CMD get-channel-messages --json "{\"channel_ids\": [\"$CHAT_CHANNEL_ID\"], \"limit\": 20}" 2>/dev/null) || {
     log "Failed to fetch channel messages (non-fatal)"
     return 0
   }
@@ -62,7 +63,7 @@ process_replies() {
     ] | sort_by(.ts) | .[]' 2>/dev/null) || true
 
   if [ -z "$new_replies" ]; then
-    log "No new replies in #my-bot-channel"
+    log "No new replies in configured chat channel"
     return 0
   fi
 
@@ -83,10 +84,10 @@ process_replies() {
     # Get thread context if this is a threaded reply
     local thread_context=""
     if [ -n "$thread_ts" ]; then
-      thread_context=$($SLACK_CMD get-channel-messages --json "{\"channel_ids\": [\"$SLACK_CHANNEL_ID\"], \"thread_ts\": \"$thread_ts\", \"limit\": 10}" 2>/dev/null) || true
+      thread_context=$($CHAT_CMD get-channel-messages --json "{\"channel_ids\": [\"$CHAT_CHANNEL_ID\"], \"thread_ts\": \"$thread_ts\", \"limit\": 10}" 2>/dev/null) || true
     fi
 
-    local action_prompt="You received a reply in the #my-bot-channel Slack channel from the user. Take the requested action.
+    local action_prompt="You received a reply in the configured chat channel from the user. Take the requested action.
 
 Reply text: $reply_text
 
@@ -96,7 +97,7 @@ $thread_context")
 INSTRUCTIONS:
 1. Understand what the user is asking for based on the reply and thread context
 2. Take the action (update people profiles, add to-do items, update project files, send follow-up messages, etc.)
-3. Post a confirmation reply in the same thread: $SLACK_CMD post-message --channel-id $SLACK_CHANNEL_ID --thread-ts '${thread_ts:-$reply_ts}' --text '<confirmation>'
+3. Post a confirmation reply in the same thread: $CHAT_CMD post-message --channel-id $CHAT_CHANNEL_ID --thread-ts '${thread_ts:-$reply_ts}' --text '<confirmation>'
 4. Keep responses concise."
 
     $AMP -x "$action_prompt" >> "$LOG_FILE" 2>&1 || {

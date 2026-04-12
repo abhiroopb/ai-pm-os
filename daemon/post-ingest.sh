@@ -18,9 +18,10 @@ GCAL_CLI="$GCAL_DIR/gcal-cli.py"
 GDRIVE_DIR="$HOME/.agents/skills/gdrive"
 GDRIVE_CLI="$GDRIVE_DIR/gdrive-cli.py"
 AMP="$HOME/bin/amp"
-# Configure your Slack CLI tool here
-SLACK_CMD="${SLACK_CMD:-slack-cli}"
-SLACK_CHANNEL="my-bot-channel"
+# Configure your notification CLI tool here. `NOTIFY_CMD`/`NOTIFY_DESTINATION`
+# are preferred generic names. The `SLACK_*` variables remain as aliases.
+NOTIFY_CMD="${NOTIFY_CMD:-${SLACK_CMD:-slack-cli}}"
+NOTIFY_DESTINATION="${NOTIFY_DESTINATION:-${SLACK_CHANNEL:-my-bot-channel}}"
 
 EVENT_ID="${1:-}"
 EVENT_SUMMARY="${2:-unknown meeting}"
@@ -172,12 +173,12 @@ $doc_content"
   tmp_state=$(jq ".processed_file_ids += [\"$file_id\"] | .last_post_meeting_check = \"$(date -u '+%Y-%m-%dT%H:%M:%SZ')\"" "$STATE_FILE")
   echo "$tmp_state" > "$STATE_FILE"
 
-  # Post success to Slack
-  $SLACK_CMD post-message --channel-name "$SLACK_CHANNEL" \
+  # Post success to the configured notification channel
+  $NOTIFY_CMD post-message --channel-name "$NOTIFY_DESTINATION" \
     --text "✅ Meeting ingested ($source): $ingest_summary
 Check outputs/meeting-notes/ and your todo list for details." \
     >> "$LOG_FILE" 2>&1 || {
-    log "WARNING: Slack notification failed for $file_id (non-fatal)"
+    log "WARNING: Notification failed for $file_id (non-fatal)"
   }
 
   # Optional: git commit (non-fatal)

@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# Journal Sync — watches Slack + Email activity, appends cross-linked entries to daily notes
+# Journal Sync — watches chat + inbox activity, appends cross-linked entries to daily notes
 # Runs every 15 min via launchd (com.ai-pm-os.journal-sync.plist)
 #
 # Architecture:
-#   1. Bash collects raw Slack activity (search-messages)
+#   1. Bash collects raw chat activity (search-messages)
 #   2. Builds cross-linking reference from people/ and workstreams/
-#   3. Calls amp -x ONCE to: check Gmail, summarize, cross-link, append to daily note
+#   3. Calls amp -x ONCE to: check inbox activity, summarize, cross-link, append to daily note
 #   4. Updates state to track what's been processed
 
 set -euo pipefail
@@ -21,8 +21,9 @@ DAILY_DIR="$PM_OS_DIR/notes/daily"
 PEOPLE_DIR="$PM_OS_DIR/people"
 WORKSTREAMS_DIR="$PM_OS_DIR/workstreams"
 AMP="$HOME/bin/amp"
-# Configure your Slack CLI tool here
-SLACK_CMD="${SLACK_CMD:-slack-cli}"
+# Configure your chat CLI tool here. `CHAT_CMD` is the preferred generic name,
+# while `SLACK_CMD` remains as a backward-compatible alias.
+CHAT_CMD="${CHAT_CMD:-${SLACK_CMD:-slack-cli}}"
 LOCK_FILE="$STATE_DIR/journal-sync.lock"
 
 mkdir -p "$STATE_DIR" "$DAILY_DIR"
@@ -101,21 +102,21 @@ done
 
 log "Cross-link refs: $(wc -l < "$PEOPLE_REF" | tr -d ' ') people, $(wc -l < "$WORKSTREAM_REF" | tr -d ' ') workstreams"
 
-# --- Collect Slack activity ---
-SLACK_DATA="$TEMP_DIR/slack-activity.txt"
+# --- Collect chat activity ---
+CHAT_DATA="$TEMP_DIR/chat-activity.txt"
 
-log "Searching Slack for user activity..."
+log "Searching chat activity..."
 
 # Messages sent by user today
-$SLACK_CMD search-messages \
+$CHAT_CMD search-messages \
   --query-terms "from:me" \
   --filter "{\"after\":\"$TODAY\"}" \
   --count 50 \
   --user-timezone America/New_York > "$TEMP_DIR/slack-sent.txt" 2>/dev/null || true
 
 # Mentions of user today
-# Replace U0XXXXXXXXX with your own Slack user ID
-$SLACK_CMD search-messages \
+# Replace U0XXXXXXXXX with your own chat user ID when needed
+$CHAT_CMD search-messages \
   --query-terms "<@U0XXXXXXXXX>" \
   --filter "{\"after\":\"$TODAY\"}" \
   --count 30 \
@@ -128,15 +129,15 @@ $SLACK_CMD search-messages \
   echo ""
   echo "=== MESSAGES MENTIONING USER ==="
   cat "$TEMP_DIR/slack-mentions.txt" 2>/dev/null || true
-} > "$SLACK_DATA"
+} > "$CHAT_DATA"
 
-SLACK_SIZE=$(wc -c < "$SLACK_DATA" | tr -d ' ')
-log "Slack data collected: ${SLACK_SIZE} bytes"
+CHAT_SIZE=$(wc -c < "$CHAT_DATA" | tr -d ' ')
+log "Chat data collected: ${CHAT_SIZE} bytes"
 
 # Skip if no meaningful activity (header-only output is ~60 bytes)
-if [ "$SLACK_SIZE" -lt 100 ]; then
-  log "No significant Slack activity found"
-  # Still run amp to check Gmail
+if [ "$CHAT_SIZE" -lt 100 ]; then
+  log "No significant chat activity found"
+  # Still run amp to check inbox activity
 fi
 
 # --- Ensure daily file has Activity Log section ---
@@ -176,8 +177,8 @@ You are a journal sync agent. Your ONLY job: append new cross-linked activity en
 
 ## Steps
 
-1. Read the Slack activity data provided below
-2. Check Gmail for new messages from today (use gmail skill: search newer_than_days=1, max_results=20)
+1. Read the chat activity data provided below
+2. Check your inbox for new messages from today using whatever inbox integration is available in the current environment
 3. Generate cross-linked entries for any NEW activity since the last sync time
 4. Append them to the `## Activity Log` section of the daily note file specified below
 
@@ -186,7 +187,7 @@ You are a journal sync agent. Your ONLY job: append new cross-linked activity en
 Each top-level entry is a timestamped bullet. Nest details underneath:
 
 ```
-- HH:MM [[Slack]] Brief description in #channel-name with [[person-slug]] about [[topic]]
+- HH:MM [[Chat]] Brief description in #channel-name with [[person-slug]] about [[topic]]
   - Key detail, decision, or quote if notable
 - HH:MM [[Email]] Subject from [[person-slug]] re: [[topic]]
   - Key detail if notable
@@ -196,7 +197,7 @@ Each top-level entry is a timestamped bullet. Nest details underneath:
 
 - **People**: `[[firstname-lastname]]` — use the exact slug from the people reference below
 - **Workstreams**: `[[workstream-slug]]` — use the exact slug from the workstreams reference below
-- **Sources**: `[[Slack]]`, `[[Email]]`, `[[Calendar]]`
+- **Sources**: `[[Chat]]`, `[[Email]]`, `[[Calendar]]`
 - **Channels**: `#channel-name` (no brackets)
 - **Notable topics**: `[[Topic Name]]` for important subjects, projects, or concepts worth linking
 
@@ -221,9 +222,9 @@ cat >> "$PROMPT_FILE" << DATAEOF
 **Last sync time:** ${LAST_SYNC:-"never (first run today)"}
 **Current time:** $(date '+%Y-%m-%d %H:%M %Z')
 
-## Slack Activity Data
+## Chat Activity Data
 
-$(cat "$SLACK_DATA")
+$(cat "$CHAT_DATA")
 
 ## People Reference (slug|display-name)
 
