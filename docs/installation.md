@@ -105,6 +105,10 @@ launchctl load ~/Library/LaunchAgents/com.ai-pm-os.daemon.plist
 
 Review the plist paths first. They contain placeholders and should be updated for your machine.
 
+## Meeting Ingestion Daemon
+
+The repo includes a full meeting ingestion workflow that automatically creates pre-meeting briefs and processes Gemini meeting notes after each meeting. See [Meeting Daemon Setup](meeting-daemon-setup.md) for prerequisites, installation steps, and troubleshooting.
+
 ## Suggested Adoption Order
 
 1. Get one workstream running.

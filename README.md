@@ -69,6 +69,7 @@ Optional integrations such as calendar lookups, email triage, chat triage, and i
 - [Installation guide](docs/installation.md): prerequisites, first-run setup, and optional launchd wiring.
 - [Chief of Staff setup](docs/chief-of-staff-setup.md): the operating model and key files.
 - [Session lifecycle](docs/session-lifecycle.md): how `cmux` sessions spin up and resume.
+- [Meeting daemon](docs/meeting-daemon-setup.md): automated pre-meeting briefs and post-meeting Gemini note ingestion.
 - [Skills](docs/skills.md): included repo-local skills and how to use them.
 - [Workstreams](workstreams/README.md): example workstreams and how to shape your own.
 
