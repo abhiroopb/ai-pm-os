@@ -29,6 +29,17 @@ What it covers:
 - dependencies and rollout risk
 - success metrics and open questions
 
+### `checking-your-lens`
+
+Use this when you want a final judgment pass before sending or saving something important.
+
+What it covers:
+
+- review the draft against the actual repo or workstream context
+- cut generic PM language and over-explanation
+- check that the answer leads with a recommendation
+- make sure the final output sounds like a real operator, not a template
+
 ### `syncing-context`
 
 Use this when you want to refresh the lightweight public state layer after a plan change or before a follow-on session.
@@ -52,7 +63,7 @@ What it covers:
 
 ## Private Layers Stay Private
 
-The internal system also uses more personal calibration layers, like voice and judgment review passes. Those are intentionally not part of the public starter kit. Treat this repo as the reusable operating model, then add your own private skills on top.
+The internal system still uses more personal calibration layers and stakeholder-specific context than the public starter kit should ship with. Treat this repo as the reusable operating model, then adapt the judgment layer to your own context.
 
 ## How Repo-Local Skills Work
 
