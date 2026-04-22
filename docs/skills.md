@@ -29,6 +29,31 @@ What it covers:
 - dependencies and rollout risk
 - success metrics and open questions
 
+### `syncing-context`
+
+Use this when you want to refresh the lightweight public state layer after a plan change or before a follow-on session.
+
+What it covers:
+
+- rebuild `system/state/queue.json`
+- rebuild `system/state/now.json`
+- mirror the latest `system/today-plan.json` into `system/state/sources/plan.json`
+- tell you when no launch plan exists yet
+
+### `closing-day`
+
+Use this when you want a quick end-of-day wrap-up instead of relying on memory tomorrow.
+
+What it covers:
+
+- read today's note and current recommended state
+- append a short `## End Of Day` section if missing
+- capture what moved, what carries forward, and what to pick up first tomorrow
+
+## Private Layers Stay Private
+
+The internal system also uses more personal calibration layers, like voice and judgment review passes. Those are intentionally not part of the public starter kit. Treat this repo as the reusable operating model, then add your own private skills on top.
+
 ## How Repo-Local Skills Work
 
 Amp discovers skills from `.agents/skills/` inside the current repository. Once you clone this repo and open it in Amp, those skills can be loaded directly.

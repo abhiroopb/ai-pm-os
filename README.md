@@ -9,6 +9,7 @@ This repo uses a simple idea: every meaningful thread of work gets its own folde
 - A `Chief of Staff` startup flow that reviews your notes, open workstreams, and routines before opening focused sessions.
 - A file-based workstream model where `CONTEXT.md` is the source of continuity.
 - Reusable routines for comms, meetings, and recurring operational work.
+- Repo-local maintenance loops for refreshing derived state and closing the day with a carry-forward snapshot.
 - Optional background scripts for daily notes, meeting briefs, and post-meeting filing.
 - Repo-local agent skills you can customize instead of rebuilding the workflow from scratch.
 
@@ -26,6 +27,14 @@ bash system/start-day.sh
 ```
 
 `CONTEXT.md` is the key design choice. If the terminal dies, the workstream does not.
+
+## Other Entry Points
+
+Once the repo is set up, the day does not need to begin and end with shell commands.
+
+- `start the day` or `chief of staff` to rebuild the launch plan
+- `sync PM OS` to refresh the lightweight state layer from the current plan
+- `end of day` or `close of day` to leave a short carry-forward snapshot in today's note
 
 ## Quick Start
 
